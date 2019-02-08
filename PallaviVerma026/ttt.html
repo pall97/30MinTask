@@ -1,0 +1,201 @@
+<!DOCTYPE html> 
+<html>
+  <head> 
+    <title> Tic Tac Toe </title>
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+       <link rel="stylesheet" type="text/css" href="ttt.css">
+      
+    <script type="text/javascript"
+    src="http://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous">
+   </script>
+
+  </head> 
+    
+ <body>
+         <b><h1>TIC TAC TOE</h1></b>
+         
+     <b>Player 1</b>
+     <input type="text" required id="p_id" placeholder="ID">
+     <input type="text" required id="pnmae" placeholder="Name"> <br>
+     <b> Player 2</b>
+     <input type="text" required id="p_id" placeholder="ID">
+     <input type="text" required id="pname" placeholder="Name"> <br>
+<!--        <button type="button" class="cancel" id="canc"> Cancel </button> <br>-->
+     <button type="submit" class="login" onclick="fetch()" id="canc">Log In </button>
+   
+<!--
+    <br>
+    Score of Player 1 = GetScore();
+    <br>
+    Score of player 2 = GetScore();
+-->
+    
+     <table id="board">
+        
+            <tr>
+           <td><button onclick="valfun(this.id)" id="one" value="1">@</button></td>
+           <td><button onclick="valfun(this.id)" id="two"value="2">@</button></td>
+           <td><button onclick="valfun(this.id)" id="three" value="3">@</button></td>
+           </tr>
+           <tr>
+           <td><button onclick="valfun(this.id)" id="four"value="4">@</button></td>
+           <td><button onclick="valfun(this.id)" id="five" value="5">@</button></td>
+           <td><button onclick="valfun(this.id)" id="six"value="6">@</button></td>
+           </tr>
+           <tr>
+           <td><button onclick="valfun(this.id)" id="seven"value="7">@</button></td>
+           <td><button onclick="valfun(this.id)" id="eight"value="8">@</button></td>
+           <td><button onclick="valfun(this.id)" id="nine"value="9">@</button></td>
+           </tr>
+         
+    </table>
+ </body>
+    
+        
+  <script>
+        alert("Log In before playing");
+//        [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
+
+var ctr=0;
+var apoints= 10; //GetScore();
+var bpoints= 10; //GetScore();
+function valfun(ide)
+{ 
+
+    if(ctr%2==0)
+{ 
+   document.getElementById(ide).innerHTML='X';
+   document.getElementById(ide).value='1';
+   console.log("changing to x");
+    
+    var varone= document.getElementById("one").value;
+    var vartwo = document.getElementById("two").value;
+    var varthree = document.getElementById("three").value;
+    var  varfour= document.getElementById("four").value;
+    var varfive = document.getElementById("five").value;
+    var varsix = document.getElementById("six").value;
+    var varseven = document.getElementById("seven").value;
+    var vareight = document.getElementById("eight").value;
+    var varnine = document.getElementById("nine").value;
+   
+ 
+     if((varone == varfour && varfour == varseven)||
+       (varfour == varfive && varfive == varsix)||
+       (varseven == vareight && vareight == varnine)||
+       (varone == vartwo && vartwo == varthree)||
+       (varfive == vartwo && vartwo == vareight)||
+       (varnine == varfive && varfive == varone)||
+       (varthree == varsix && varsix == varnine)||
+       (varseven == varfive && varfive == varthree))
+       {
+         
+           alert("player1 won");
+          apoints=apoints+10;
+          bpoints=bpoints-5;
+    UpdateScore(ide);
+         //  console.log(apoints);//PUT@@@@@@@@@
+//           break;
+       
+       }
+ 
+
+       
+}
+    else
+        
+{
+        
+     document.getElementById(ide).innerHTML='0';
+     document.getElementById(ide).value='2';
+     console.log("changing to 0");
+    var varone= document.getElementById("one").value;
+    var vartwo = document.getElementById("two").value;
+    var varthree = document.getElementById("three").value;
+    var  varfour= document.getElementById("four").value;
+    var varfive = document.getElementById("five").value;
+    var varsix = document.getElementById("six").value;
+    var varseven = document.getElementById("seven").value;
+    var vareight = document.getElementById("eight").value;
+    var varnine = document.getElementById("nine").value;
+   
+     if((varone == varfour && varfour == varseven)||
+       (varfour == varfive && varfive == varsix)||
+       (varseven == vareight && vareight == varnine)||
+       (varone == vartwo && vartwo == varthree)||
+       (varfive == vartwo && vartwo == vareight)||
+       (varnine == varfive && varfive == varone)||
+       (varthree == varsix && varsix == varnine)||
+       (varseven == varfive && varfive == varthree))
+       {
+         
+           alert("Player2 won");
+bpoints=apoints+10;
+apoints=bpoints-5;
+ UpdateScore(ide); 
+           //  console.log(apoints);
+// break;
+       
+       }
+  
+    }
+    ctr++;
+
+}
+
+   </script>
+<script>   
+    
+  
+      function GetScore(){
+          ide=document.getElementById("p_id").value;
+      Url='http://localhost:64445/api/tictacto/';
+      Url=Url+ide;
+        $.ajax({
+            url: Url,
+            type: 'GET',
+            dataType: 'json',
+            success: function(res){
+            console.log(res);    
+   
+        }
+        });
+    }
+
+   function UpdateScore() 
+      {
+           var Id = document.getElementById("p_id").value; // var , form
+           var Name = document.getElementById("pname").value; 
+          var Score = document.getElementById("Score").value;
+
+          
+      var dataToSend= {
+             "PID": Id, //db:var
+             "username":Name,
+             "points":Score,
+
+                     };
+          
+      ide=document.getElementById("p_id").value;
+      Url='http://localhost:64445/api/tictacto/';
+      Url=Url+ide;
+
+
+      $.ajax({
+            url:Url,
+            type: 'PUT',
+            dataType: 'json',
+            data: dataToSend,
+            success: function(data){
+                alert("Score Updated");
+            console.log(data);
+            
+              }
+        });
+    };
+
+    
+    </script>
+    
+ </html>
