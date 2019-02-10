@@ -1,0 +1,19 @@
+create database ttt;
+
+create table tictacto (
+PID int primary key,
+username varchar(20),
+points int );
+
+
+insert into tictacto values(
+1,
+'Pallavi',
+0);
+
+insert into tictacto values(
+2,
+'Vishal',
+0);
+
+select * from tictacto;

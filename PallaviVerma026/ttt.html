@@ -9,21 +9,22 @@
     src="http://code.jquery.com/jquery-3.3.1.js"
     integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous">
+        
    </script>
 
   </head> 
     
  <body>
-         <b><h1>TIC TAC TOE</h1></b>
+     <b><h1>TIC TAC TOE</h1></b>
          
      <b>Player 1</b>
-     <input type="text" required id="p_id" placeholder="ID">
-     <input type="text" required id="pnmae" placeholder="Name"> <br>
+     <input type="text" required id="p_id1" placeholder="ID">
+     <input type="text" required id="pname1" placeholder="Name"> <br>
      <b> Player 2</b>
-     <input type="text" required id="p_id" placeholder="ID">
-     <input type="text" required id="pname" placeholder="Name"> <br>
+     <input type="text" required id="p_id2" placeholder="ID">
+     <input type="text" required id="pname2" placeholder="Name"> <br>
 <!--        <button type="button" class="cancel" id="canc"> Cancel </button> <br>-->
-     <button type="submit" class="login" onclick="fetch()" id="canc">Log In </button>
+     <button type="submit" class="login" onclick="GetScore()" id="canc">Log In </button>
    
 <!--
     <br>
@@ -55,12 +56,14 @@
     
         
   <script>
-        alert("Log In before playing");
-//        [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
+      alert("Log in before playing");
+      var score1=0;
+      var score2=0;
+      var ctr=0;
+//  winning cond :      [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
 
-var ctr=0;
-var apoints= 10; //GetScore();
-var bpoints= 10; //GetScore();
+
+
 function valfun(ide)
 { 
 
@@ -91,17 +94,15 @@ function valfun(ide)
        (varseven == varfive && varfive == varthree))
        {
          
-           alert("player1 won");
-          apoints=apoints+10;
-          bpoints=bpoints-5;
-          UpdateScore(ide);
+           alert("Player 1 won");
+          score1=score1+10;
+         score2=score2-5;
+          UpdateScore();
          //  console.log(apoints);//PUT@@@@@@@@@
 //           break;
        
        }
- 
-
-       
+    
 }
     else
         
@@ -113,7 +114,7 @@ function valfun(ide)
     var varone= document.getElementById("one").value;
     var vartwo = document.getElementById("two").value;
     var varthree = document.getElementById("three").value;
-    var  varfour= document.getElementById("four").value;
+    var varfour= document.getElementById("four").value;
     var varfive = document.getElementById("five").value;
     var varsix = document.getElementById("six").value;
     var varseven = document.getElementById("seven").value;
@@ -130,64 +131,108 @@ function valfun(ide)
        (varseven == varfive && varfive == varthree))
        {
          
-           alert("Player2 won");
-           bpoints=apoints+10;
-           apoints=bpoints-5;
-            UpdateScore(ide); 
-           //  console.log(apoints);
-// break;
+           alert("Player 2 won");
+           score2=score2+10;
+           score1=score1-5;
+           UpdateScore(); 
+          
+           // break;
        
        }
   
     }
     ctr++;
-
 }
 
    
-    
-  
-      function GetScore(){
-          ide=document.getElementById("p_id").value;
-      Url='http://localhost:64445/api/tictacto/';
-      Url=Url+ide;
+    function GetScore()
+      { 
+        alert("Users suucessfully logged in");
+        ide1=document.getElementById("p_id1").value;
+        Url='http://localhost:64445/api/tictactoes/';
+        Url1=Url+''+ide1;
         $.ajax({
-            url: Url,
+            url: Url1,
+            type: 'GET',
+            dataType: 'json',
+            success: function(res){
+            console.log(res);  
+                //displ
+            score1=res["points"];
+            console.log(score1);
+                alert("Player 1 :" score1 & 
+                      "Player 2 :" score2);   
+                       
+                                  }
+              });
+        
+      ide2=document.getElementById("p_id2").value;
+      Url='http://localhost:64445/api/tictactoes/';
+      Url2=Url+ide2;
+        $.ajax({
+            url: Url2,
             type: 'GET',
             dataType: 'json',
             success: function(res){
             console.log(res);    
-   
-        }
-        });
-    }
+            score2=res["points"];
+            console.log(score2);  
+                                  }
+              });
+          
+      }
+      
+     
 
    function UpdateScore() 
       {
-           var Id = document.getElementById("p_id").value; // var , form
-           var Name = document.getElementById("pname").value; 
-          var Score = document.getElementById("Score").value;
+           var Id1 = document.getElementById("p_id1").value; // var , form
+           var Name1 = document.getElementById("pname1").value; 
+       
 
+           var Id2 = document.getElementById("p_id2").value; // var , form
+           var Name2 = document.getElementById("pname2").value; 
+
+
+      var dataToSend1= {
+             "PID": Id1, //db:var
+             "username":Name1,
+             "points":score1
+                       };
           
-      var dataToSend= {
-             "PID": Id, //db:var
-             "username":Name,
-             "points":Score,
-
-                     };
-          
-      ide=document.getElementById("p_id").value;
-      Url='http://localhost:64445/api/tictacto/';
-      Url=Url+ide;
-
-
+      ide1=document.getElementById("p_id1").value;
+      Url='http://localhost:64445/api/tictactoes/';
+      Url1=Url+ide1;
+        
       $.ajax({
-            url:Url,
+            url:Url1,
             type: 'PUT',
             dataType: 'json',
-            data: dataToSend,
+            data: dataToSend1,
             success: function(data){
-                alert("Score Updated");
+                alert("Score Updated1");
+            console.log(data);
+            
+              }
+        });
+             
+      ide2=document.getElementById("p_id2").value;
+      Url='http://localhost:64445/api/tictactoes/';
+      Url2=Url+ide2;
+               
+     var dataToSend2= {
+        "PID": Id2, //db:var
+        "username":Name2,
+        "points":score2
+                     };
+          
+      $.ajax({
+            url:Url2,
+            type: 'PUT',
+            dataType: 'json',
+            data: dataToSend2,
+            success: function(data){
+                alert("Score Updated2");
             console.log(data);
             
               }
