@@ -20,11 +20,17 @@
      <b>Player 1</b>
      <input type="text" required id="p_id1" placeholder="ID">
      <input type="text" required id="pname1" placeholder="Name"> <br>
-     <b> Player 2</b>
+     <b> Score:</b><div id="sc1"><b></b></div>
+ 
+     <b> Player 2</b> 
      <input type="text" required id="p_id2" placeholder="ID">
      <input type="text" required id="pname2" placeholder="Name"> <br>
+     <b>Score:</b> <div id="sc2"> <b> </b> </div><br>
+    
 <!--        <button type="button" class="cancel" id="canc"> Cancel </button> <br>-->
-     <button type="submit" class="login" onclick="GetScore()" id="canc">Log In </button>
+     <button type="submit" class="login" onclick="GetScore()" id="canc">Log In </button><br>
+    
+    
    
 <!--
     <br>
@@ -57,13 +63,19 @@
         
   <script>
       alert("Log in before playing");
-      var score1=0;
-      var score2=0;
+      var score1;
+      var score2;
       var ctr=0;
+       
 //  winning cond :      [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
 
 
-
+function DisplayScore()
+      {
+          document.getElementById("sc1").innerHTML=score1;
+          document.getElementById("sc2").innerHTML=score2;
+       }
+      
 function valfun(ide)
 { 
 
@@ -96,9 +108,13 @@ function valfun(ide)
          
            alert("Player 1 won");
           score1=score1+10;
-         score2=score2-5;
+          score2=score2-5;
           UpdateScore();
-         //  console.log(apoints);//PUT@@@@@@@@@
+          
+           
+//            document.getElementById("sc1").innerHTML=score1;
+//            document.getElementById("sc2").innerHTML=score2;
+//           console.log(apoints);//PUT@@@@@@@@@
 //           break;
        
        }
@@ -136,6 +152,7 @@ function valfun(ide)
            score1=score1-5;
            UpdateScore(); 
           
+
            // break;
        
        }
@@ -144,8 +161,8 @@ function valfun(ide)
     ctr++;
 }
 
-   
-    function GetScore()
+  
+      function GetScore()
       { 
         alert("Users suucessfully logged in");
         ide1=document.getElementById("p_id1").value;
@@ -156,11 +173,10 @@ function valfun(ide)
             type: 'GET',
             dataType: 'json',
             success: function(res){
-            console.log(res);  
-                //displ
+            console.log(res);       
             score1=res["points"];
             console.log(score1);
-                
+            DisplayScore();
                                   }
               });
         
@@ -175,9 +191,13 @@ function valfun(ide)
             console.log(res);    
             score2=res["points"];
             console.log(score2);  
+            DisplayScore();
                                   }
               });
+//             function InitialScore()
+          console.log(score2); 
           
+   
       }
       
      
@@ -208,8 +228,9 @@ function valfun(ide)
             dataType: 'json',
             data: dataToSend1,
             success: function(data){
-                alert("Score Updated1");
-            console.log(data);
+                alert("Score of Player 1 Updated");
+                DisplayScore();
+          //  console.log(data);
             
               }
         });
@@ -230,8 +251,9 @@ function valfun(ide)
             dataType: 'json',
             data: dataToSend2,
             success: function(data){
-                alert("Score Updated2");
-            console.log(data);
+              alert("Score of Player 2 Updated");
+                DisplayScore();
+          //  console.log(data);
             
               }
         });
